@@ -16,12 +16,22 @@ class Hotel {
         this.name = newName;
     }
 
+    boolean checkRoom(String name){
+        for (int i = 0; i < listOfRooms.size(); i++){
+            if (listOfRooms.get(i).getRoomName().equals(name)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void addRoom(Room room) { // creates room for hotel
 
         listOfRooms.add(room);
     }
 
-    public void removeRoom(Room room) {
+    public void removeRoom(Room room) { // removes room 
         listOfRooms.remove(room);
     }
 
@@ -43,6 +53,10 @@ class Hotel {
 
     public ArrayList<Reservation> viewReservations(){
         return listOfReservations; // view reservations
+    }
+
+    public ArrayList<Room> viewRooms(){
+        return listOfRooms; // view reservations
     }
 
     public String getHotelName(){
