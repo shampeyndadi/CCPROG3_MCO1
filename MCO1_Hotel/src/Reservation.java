@@ -13,11 +13,11 @@ class Reservation {
     private Room room;
     private ArrayList<Room> listOfRooms;
 
-    public Reservation(String guestName, Date checkInDate, Date checkOutDate, double totalPrice, Room room) {
+    public Reservation(String guestName, Date checkInDate, Date checkOutDate, Room room) {
         this.guestName = guestName;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
-        this.totalPrice = totalPrice;
+        this.totalPrice = 1299.0;
         this.room = room;
     }
 
