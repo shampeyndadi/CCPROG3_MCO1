@@ -26,27 +26,21 @@ class Hotel {
         return false;
     }
 
-    public void addRoom(Room room) { // creates room for hotel
+    public boolean addRoom(Room room) { // creates room for hotel
 
-        listOfRooms.add(room);
+        if (listOfRooms.size() <= 50){
+            listOfRooms.add(room);
+            return true;
+        }
+
+        return false;
     }
 
     public void removeRoom(Room room) { // removes room 
         listOfRooms.remove(room);
     }
 
-    public boolean checkAvailability(Room room) {
-
-        int i;
-
-        for (i = 0; i < listOfReservations.size(); i++)
-            if (listOfReservations.get(i).room().equals(room)){ // iterates over the array list
-                return false;
-            }
-
-        return true;
-    }
-
+    
     public void removeReservation(Reservation reservation) {
         listOfReservations.remove(reservation); // removes reservation 
     }
@@ -60,7 +54,7 @@ class Hotel {
     }
 
     public String getHotelName(){
-        return name;
+        return name; // gets hotel name 
     }
 
 
