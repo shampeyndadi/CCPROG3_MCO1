@@ -2,74 +2,94 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class ManageHotel {
-    layout layout = new layout();
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc;
     private ArrayList<Hotel> Hotel;
 
     public ManageHotel(){
         this.Hotel = new ArrayList<>();
+        this.sc = new Scanner(System.in);
     }
 
     public ArrayList<Hotel> listOfHotels(){
         return Hotel;
     }
 
+    public boolean doesHotelExist(ArrayList<Hotel> Hotel, String name){
+        
+        for (int i = 0; i < Hotel.size(); i++){
+            if (Hotel.get(i).getHotelName().equals(name)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void DisplayHotels(){
+        for (int i = 0; i < listOfHotels().size(); i++){
+            System.out.println(i + 1 + ". " + listOfHotels().get(i).getHotelName());
+        }
+    }
+
+    public boolean doesRoomExist(ArrayList<Hotel> hotels, String roomName) {
+        for (Hotel hotel : hotels) {
+            for (Room room : hotel.viewRooms()) {
+                if (room.getRoomName().equals(roomName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+
     public void createHotel(){
         System.out.print("Enter Hotel name: ");
         String name = sc.nextLine();
-
-        Hotel.add(new Hotel(name));
-
-        System.out.println();
-        System.out.println(name + " created succesfully");
         
+        if (!doesHotelExist(Hotel, name)){
+            Hotel.add(new Hotel(name));
+            System.out.println("\n" + name + " created succesfully\n");
+        }else{
+            System.out.println("Creation unsuccessful, hotel already exists");
+        }
+
     }
 
     public void createRoom(){
         if (Hotel.isEmpty()){
-            System.out.println("No hotels to add rooms! Please create a hotel");
+            System.out.println("No hotels present! Please create a hotel first");
         }else{
-            System.out.println();
-            System.out.println("Available Hotels: ");
-            System.out.println();
-
-            for (int i = 0; i < Hotel.size(); i++){
-                System.out.println(i + 1 + ". " + Hotel.get(i).getHotelName());
-            }
-            
-            System.out.println();
-
-            System.out.print("Enter Index: ");
-            int HotelIndex = sc.nextInt();
+            DisplayHotels();
+            System.out.print("\n\nEnter index: ");
+            int index = sc.nextInt();
             sc.nextLine();
 
-            System.out.println();
+            System.out.println("Enter room name: ");
+            String roomName = sc.nextLine();
+            if (!(doesRoomExist(Hotel, roomName)) || Hotel.get(index - 1).viewRooms().isEmpty()){
 
-            System.out.println("Add room to " + Hotel.get(HotelIndex - 1).getHotelName());
-            System.out.print("Enter room name: ");
-            String name = sc.nextLine();
-            if(!(Hotel.get(HotelIndex - 1).checkRoom(name))){
-                Hotel.get(HotelIndex - 1).addRoom(new Room(name));
-                System.out.println("Room  " + name + " added to " + Hotel.get(HotelIndex - 1).getHotelName());
+                Hotel.get(index - 1).addRoom(new Room(roomName));
+                System.out.println("\nRoom added succesfully to hotel!");
+
             }else{
-                System.out.println("Sorry room already exists, please create a different room!");
-            }
-           
+                System.out.println("\nRoom already exists!");
+            }  
+
         }
     }
 
-    public void changeName(String name){
-        for (int i = 0; i < Hotel.size(); i++){
-            System.out.println(i + 1 + ". " + Hotel.get(i).getHotelName());
-        }
-
-        int HotelIndex = sc.nextInt();
+    public void changeHotelName(){
+        DisplayHotels();
+        System.out.print("\n\nEnter index: ");
+        int index = sc.nextInt();
         sc.nextLine();
-
-        Hotel.get(HotelIndex - 1).changeHotelName(name);
-
-        System.out.println("Hotel successfully changed to " + name);
-
+        System.out.println("Enter new name: ");
+        String newName = sc.nextLine();
+        if (doesHotelExist(Hotel, Hotel.get(index - 1).getHotelName())){
+            Hotel.get(index - 1).changeHotelName(newName);
+            System.out.print("Hotel name succesfully changed!");
+        }
     }
 
 }
