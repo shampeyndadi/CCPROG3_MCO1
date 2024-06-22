@@ -18,22 +18,45 @@ public class Execute{
         System.out.print("\033[H\033[2J");
     }
 
+    private void pressEnterToContinue()
+    { 
+           System.out.println("Press Enter key to continue...");
+           try
+           {
+               System.in.read();
+           }  
+           catch(Exception e)
+           {}  
+    }
+
     public void ManageHotel(){
         boolean run = true;
         int option;
     
         do{
             layout.ManageHotel();
+            System.out.print("\n          [Enter option]: ");
             option = sc.nextInt();
             switch(option){
                 case 1:
                     clearConsole();
                     HotelManager.AddRooms();
+                    pressEnterToContinue();
+                    clearConsole();
                     break;
                 case 2:
+                    clearConsole();
                     HotelManager.changeHotelName();
+                    pressEnterToContinue();
+                    clearConsole();
                     break;
+                case 5:
+                    clearConsole();
+                    HotelManager.removeHotel();
+                    pressEnterToContinue();
+                    clearConsole();
                 case 6: 
+                    clearConsole();
                     run = false;
                     clearConsole();
                     break; 
@@ -47,11 +70,14 @@ public class Execute{
         
         do{
             layout.MainMenu();
+            System.out.print("\n          [Enter option]: ");
             option = sc.nextInt();
             switch(option){
                 case 1:
                     clearConsole();
                     HRS.createHotel();
+                    pressEnterToContinue();
+                    clearConsole();
                     break;
                 case 2:
                     clearConsole();
