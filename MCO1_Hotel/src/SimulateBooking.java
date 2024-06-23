@@ -99,26 +99,39 @@ public class SimulateBooking {
                 exe.pressEnterToContinue();
                 exe.clearConsole();
             }else{
+                
                 Hotel chosenHotel = HotelLists.listOfHotels().get(index-1);
                 ArrayList<Room> roomsOfChosenHotel = chosenHotel.viewRooms();
                 ArrayList<Reservation> reservations = chosenHotel.viewReservations();
 
                 System.out.println(chosenHotel.getHotelName()+"'s available rooms on your specified dates\n");
         
-                roomAvailable(roomsOfChosenHotel, reservations, checkOut, checkIn);
+                ArrayList<Room> availableRooms = roomAvailable(roomsOfChosenHotel, reservations, checkOut, checkIn);
+
+                for (int i = 0; i < availableRooms.size(); i++){
+                    System.out.println(i+1 + ". " + availableRooms.get(i).getRoomName());
+                }
 
                 System.out.print("*------------------------------------*\n\n");
                 
-                System.out.println("Enter room index: ");
+                System.out.print("Enter room index: ");
                 int roomIndex = sc.nextInt();
                 sc.nextLine();
 
-                System.out.println("Enter customer name: ");
+                while(!(roomIndex <= availableRooms.size() && roomIndex != 0)){
+                    System.out.print("Error room doesn't exist! Enter room index again: ");
+                    roomIndex = sc.nextInt();
+                    sc.nextLine();
+                }
+
+                System.out.println();
+
+                System.out.print("Enter customer name: ");
                 String name = sc.nextLine();
 
                 System.out.println();
 
-                Room chosenRoom = roomsOfChosenHotel.get(roomIndex-1);
+                Room chosenRoom = availableRooms.get(roomIndex-1);
 
                 Reservation reserved = new Reservation(name, checkIn, checkOut, chosenRoom);
                 chosenHotel.viewReservations().add(reserved);
@@ -137,24 +150,29 @@ public class SimulateBooking {
             }
         }
     }
+    
+    private ArrayList<Room> roomAvailable(ArrayList<Room> roomsOfChosenHotel, ArrayList<Reservation> reservations, Date checkOut, Date checkIn) {
+        ArrayList<Room> availableRooms = new ArrayList<>();
 
-    private void roomAvailable(ArrayList<Room> roomsOfChosenHotel, ArrayList<Reservation> reservations, Date checkOut, Date checkIn){
         for (Room room : roomsOfChosenHotel) {
-            boolean isAvailable = true; 
+            boolean isAvailable = true;
 
             for (Reservation reservation : reservations) {
-                if (room.equals(reservation.room())) { 
-                    if (!(checkOut.before(reservation.checkInDate()) || checkIn.after(reservation.checkOutDate()))) {
+                if (room.equals(reservation.room())) {
+                    if (!(checkOut.before(reservation.checkInDate()) || checkIn.after(reservation.checkOutDate())) || checkIn.equals(reservation.checkOutDate())) {
                         isAvailable = false;
                     }
                 }
             }
 
+            room.changeAvailability(isAvailable);
+
             if (isAvailable) {
-                System.out.println(room.getRoomName()); 
+                availableRooms.add(room);
             }
         }
 
+        return availableRooms;
     }
 
     private boolean verifyMonth(String month){
