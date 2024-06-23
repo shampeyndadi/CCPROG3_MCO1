@@ -99,7 +99,7 @@ public class SimulateBooking {
                 exe.pressEnterToContinue();
                 exe.clearConsole();
             }else{
-                
+
                 Hotel chosenHotel = HotelLists.listOfHotels().get(index-1);
                 ArrayList<Room> roomsOfChosenHotel = chosenHotel.viewRooms();
                 ArrayList<Reservation> reservations = chosenHotel.viewReservations();
@@ -159,7 +159,7 @@ public class SimulateBooking {
 
             for (Reservation reservation : reservations) {
                 if (room.equals(reservation.room())) {
-                    if (!(checkOut.before(reservation.checkInDate()) || checkIn.after(reservation.checkOutDate())) || checkIn.equals(reservation.checkOutDate())) {
+                    if (!(checkOut.before(reservation.checkInDate()) || checkIn.after(reservation.checkOutDate()))) {
                         isAvailable = false;
                     }
                 }
