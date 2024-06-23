@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 public class SimulateBooking {
     private Hotels HotelLists;
-    private Date Date;
     private Scanner sc;
     Execute exe = new Execute();
 
@@ -36,42 +35,74 @@ public class SimulateBooking {
         System.out.println("\nEnter preferred check in date: ");
         System.out.print("*------------------------------------*\n\n");
         System.out.print("Enter month: ");
-        String month = sc.nextLine();
+        String checkInMonth = sc.nextLine();
 
-        while (!verifyMonth(month)){
+        while (!verifyMonth(checkInMonth)){
             System.out.print("Enter month: ");
-            month = sc.nextLine();
+            checkInMonth = sc.nextLine();
         }
 
         System.out.println("Enter day: ");
-        int day = sc.nextInt();
+        int checkInDay = sc.nextInt();
 
-        while(!(day < 31)){
+        while(!(checkInDay < 31)){
             System.out.println("Enter day: ");
-            day = sc.nextInt();
+            checkInDay = sc.nextInt();
         }
 
         System.out.println("Enter year: ");
-        int year = sc.nextInt();
+        int checkInYear = sc.nextInt();
 
-        while (!(year != 2004)){
+        while (!(checkInYear < 2024)){
             System.out.println("Enter year: ");
-            year = sc.nextInt();    
+            checkInYear = sc.nextInt();    
         }
-
-        Date checkIn = new Date(month, year, day);
 
         exe.clearConsole();
 
+        System.out.println("\nEnter preferred check out date: ");
         System.out.print("*------------------------------------*\n\n");
+        System.out.print("Enter month: ");
+        String checkOutMonth = sc.nextLine();
 
+        while (!verifyMonth(checkOutMonth)){
+            System.out.print("Enter month: ");
+            checkOutMonth = sc.nextLine();
+        }
+
+        System.out.println("Enter day: ");
+        int checkOutDay = sc.nextInt();
+
+        while(!(checkOutDay < 31)){
+            System.out.println("Enter day: ");
+            checkOutDay = sc.nextInt();
+        }
+
+        System.out.println("Enter year: ");
+        int checkOutYear = sc.nextInt();
+
+        while (!(checkOutYear < 2024)){
+            System.out.println("Enter year: ");
+            checkOutYear = sc.nextInt();    
+        }
+
+        Date checkIn = new Date(checkInMonth, checkInYear, checkInDay);
+        Date checkOut = new Date(checkOutMonth, checkOutYear, checkOutDay);
+
+        exe.clearConsole();
+        
         Hotel chosenHotel = HotelLists.listOfHotels().get(index-1);
         ArrayList<Room> roomsOfChosenHotel = chosenHotel.viewRooms();
-        ArrayList<Reservation> reservations = chosenHotel.viewReservations();
 
-        System.out.println(chosenHotel.getHotelName()+"'s available rooms\n");
-        
+        System.out.println(chosenHotel.getHotelName()+"'s available rooms on your specified dates\n");
+ 
         //loop to display rooms in the hotel that is not yet booked on the provided check in day
+
+        for (int i = 0; i < roomsOfChosenHotel.size(); i++){
+            if (roomsOfChosenHotel.get(i).getAvailability()){
+                System.out.println(i+1 + roomsOfChosenHotel.get(i).getRoomName());
+            }
+        }
         
         System.out.println("Enter room index: ");
         int roomIndex = sc.nextInt();
@@ -80,8 +111,12 @@ public class SimulateBooking {
         String name = sc.nextLine();
 
         System.out.println();
-        
-    }
 
+        Room chosenRoom = roomsOfChosenHotel.get(roomIndex-1);
+
+        chosenHotel.viewReservations().add(new Reservation(name, checkIn, checkOut, chosenRoom));
+        chosenRoom.changeAvailability(false);
+
+    }
 
 }
